@@ -2,8 +2,8 @@ use spinners::{Spinner, Spinners};
 use std::thread::sleep;
 use std::time::Duration;
 
-const YFC_URL: &str = "github.com/adamhutchings/yfc";
-const STDLIB_URL: &str = "github.com/adamhutchings/stdlib";
+const YFC_URL: &str = "GitHub.com/adamhutchings/yfc";
+const STDLIB_URL: &str = "GitHub.com/adamhutchings/yflib";
 
 fn get_package_version(_package: &str) -> &str {
     // TODO: get package version from name
