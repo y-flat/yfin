@@ -1,7 +1,12 @@
-use installer::{install, install_compiler, install_stdlib, uninstall, upgrade, version};
+use install::{install, install_compiler, install_stdlib};
+use uninstall::{uninstall};
+use upgrade::{upgrade};
 use structopt::StructOpt;
 
-pub mod installer;
+pub mod install;
+pub mod package;
+pub mod uninstall;
+pub mod upgrade;
 
 #[derive(StructOpt)]
 #[structopt(name = "yfin", about = "Y-Flat Installer")]
@@ -32,14 +37,6 @@ enum Command {
         package: String,
     },
 
-    /// Get version of package
-    #[structopt(name = "version")]
-    Version {
-        /// yfin version <package>
-        #[structopt()]
-        package: String,
-    },
-
     /// Install newer version of package
     #[structopt(name = "upgrade")]
     Upgrade {
@@ -55,7 +52,6 @@ fn main() {
         Command::InstallCompiler {} => install_compiler(),
         Command::InstallStdlib {} => install_stdlib(),
         Command::Uninstall { package } => uninstall(&package),
-        Command::Version { package } => version(&package),
         Command::Upgrade { package } => upgrade(&package),
     }
 }
