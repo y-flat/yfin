@@ -1,4 +1,4 @@
-use super::{debug};
+use super::debug;
 use std::env;
 use std::fs;
 use std::fs::File;
@@ -6,20 +6,22 @@ use std::io::prelude::*;
 use users::get_current_username;
 
 fn create_file_contents(name: String) -> String {
-    let username = get_current_username();
+    let username = get_current_username().unwrap();
 
     format!(
         "
-# package.yml \
-package: \
-    name: '{}' \
-    description: 'An example package for math in yf' \
-    authors: \
-        - '{:?}' \
-    license: 'MIT' \
+# package.yml
+package:
+    name: '{}'
+    description: 'An example package for math in yf'
+    authors:
+        - {:?}
 
-# Dependencies for this package \
-depends:",
+    license: 'MIT'
+
+# Dependencies for this package
+depends:
+",
         name, username
     )
 }
