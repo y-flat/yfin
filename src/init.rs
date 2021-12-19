@@ -9,10 +9,9 @@ fn create_file_contents(name: String) -> String {
     let username = get_current_username().unwrap();
 
     format!(
-        "
-# package.yml
+        "# package.yml
 package:
-    name: '{}'
+    name: {}
     description: 'An example package for math in yf'
     authors:
         - {:?}
@@ -43,11 +42,12 @@ pub fn init(name: Option<String>) -> std::io::Result<()> {
     let project_name;
     if name.is_none() {
         let path = env::current_dir()?;
+        let path_name = path.components().next_back().unwrap();
         debug!(
             "Name not specified, working in current directory {:?}",
-            path
+            path_name.as_os_str()
         );
-        project_name = path.display().to_string();
+        project_name = format!("{:?}", path_name.as_os_str());
     } else {
         debug!("Creating directory called {}", name.clone().unwrap());
         fs::create_dir_all(format!("/{:?}", name))?;
