@@ -1,8 +1,11 @@
+use init::init;
 use install::{install, install_compiler, install_stdlib};
-use uninstall::{uninstall};
-use upgrade::{upgrade};
+use log::{debug};
 use structopt::StructOpt;
+use uninstall::uninstall;
+use upgrade::upgrade;
 
+pub mod init;
 pub mod install;
 pub mod package;
 pub mod uninstall;
@@ -44,14 +47,25 @@ enum Command {
         #[structopt()]
         package: String,
     },
+
+    /// Initialize a package
+    #[structopt(name = "init")]
+    Init {
+        /// yfin init <name>
+        #[structopt()]
+        name: Option<String>,
+    },
 }
 
 fn main() {
+    env_logger::init();
+
     match Command::from_args() {
         Command::Install { url } => install(&url),
         Command::InstallCompiler {} => install_compiler(),
         Command::InstallStdlib {} => install_stdlib(),
         Command::Uninstall { package } => uninstall(&package),
         Command::Upgrade { package } => upgrade(&package),
+        Command::Init { name } => init(name).unwrap(),
     }
 }
