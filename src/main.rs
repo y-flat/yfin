@@ -1,8 +1,9 @@
 use install::{install, install_compiler, install_stdlib};
-use uninstall::{uninstall};
-use upgrade::{upgrade};
 use structopt::StructOpt;
+use uninstall::uninstall;
+use upgrade::upgrade;
 
+pub mod error;
 pub mod install;
 pub mod package;
 pub mod uninstall;
