@@ -6,25 +6,27 @@ use std::io::prelude::*;
 
 pub fn create_contents(name: String) {
     // Create package.yml and src
-    let mut file = File::create("package.yml")?;
     debug!("Creating directory package.yml");
-    fs::create_dir_all("/src")?;
+    let mut file = File::create("package.yml")?;
+
     debug!("Creating src/ folder");
+    fs::create_dir_all("/src")?;
 }
 
 pub fn init(name: Option<String>) -> std::io::Result<()> {
     if name.is_none() {
-        debug!("Name not specified, working in current directory");
         let path = env::current_dir()?;
-        println!("The current directory is {}", path.display());
+        debug!("Name not specified, working in current directory {}", path);
+
         let project_name: String = path.display();
     } else {
-        // Create directory with name
-        fs::create_dir_all(format!("/{}", name))?;
         debug!("Creating directory called {}", name);
+        fs::create_dir_all(format!("/{}", name))?;
 
         let project_name: String = name;
-        create_contents(project_name);
     }
+
+    create_contents(project_name);
+
     Ok(())
 }
