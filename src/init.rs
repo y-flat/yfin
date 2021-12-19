@@ -3,8 +3,28 @@ use std::env;
 use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
+use users::get_current_username;
 
-pub fn create_contents(name: String) {
+fn create_file(name: String) -> String {
+    let username = get_current_username();
+
+    format!(
+        "
+# package.yml \
+package: \
+    name: '{}' \
+    description: 'An example package for math in yf' \
+    authors: \
+        - '{}' \
+    license: 'MIT' \
+
+# Dependencies for this package \
+depends:",
+        name, username
+    );
+}
+
+fn create_contents(name: String) {
     // Create package.yml and src
     debug!("Creating directory package.yml");
     let mut file = File::create("package.yml")?;
