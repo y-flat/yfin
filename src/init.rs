@@ -50,7 +50,8 @@ pub fn init(name: Option<String>) -> std::io::Result<()> {
         project_name = format!("{:?}", path_name.as_os_str());
     } else {
         debug!("Creating directory called {}", name.clone().unwrap());
-        fs::create_dir_all(format!("/{:?}", name))?;
+        fs::create_dir_all(format!("./{}", name.clone().unwrap()))?;
+        env::set_current_dir(name.clone().unwrap())?;
         project_name = name.unwrap();
     }
 
