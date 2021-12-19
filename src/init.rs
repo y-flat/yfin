@@ -32,7 +32,7 @@ fn create_package_contents(name: String) -> std::io::Result<()> {
     write!(file, "{}", contents)?;
 
     debug!("Creating src/ folder");
-    fs::create_dir_all("/src")?;
+    fs::create_dir_all("./src")?;
 
     Ok(())
 }
