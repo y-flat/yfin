@@ -24,10 +24,11 @@ depends:",
     );
 }
 
-fn create_contents(name: String) {
+fn create_package_contents(name: String) {
     // Create package.yml and src
     debug!("Creating directory package.yml");
     let mut file = File::create("package.yml")?;
+    file.write_all(create_file_contents(name));
 
     debug!("Creating src/ folder");
     fs::create_dir_all("/src")?;
@@ -46,7 +47,7 @@ pub fn init(name: Option<String>) -> std::io::Result<()> {
         let project_name: String = name;
     }
 
-    create_contents(project_name);
+    create_package_contents(project_name);
 
     Ok(())
 }
