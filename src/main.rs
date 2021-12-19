@@ -6,6 +6,7 @@ use uninstall::uninstall;
 use upgrade::upgrade;
 
 pub mod init;
+pub mod error;
 pub mod install;
 pub mod package;
 pub mod uninstall;
