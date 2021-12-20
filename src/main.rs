@@ -12,6 +12,7 @@ pub mod install;
 pub mod package;
 pub mod uninstall;
 pub mod upgrade;
+pub mod local;
 
 #[derive(StructOpt)]
 #[structopt(name = "yfin", about = "Y-Flat Installer")]
