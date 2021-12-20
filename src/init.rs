@@ -27,7 +27,7 @@ depends:
 }
 
 fn git_init_package() {
-    match Repository::init("./src") {
+    match Repository::init(".") {
         Ok(_) => debug!("Initialized git"),
         Err(e) => panic!("failed to init: {}", e),
     }
