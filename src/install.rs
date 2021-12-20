@@ -1,3 +1,4 @@
+use super::debug;
 use crate::package::fetch_package_manifest;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::thread::sleep;
@@ -22,7 +23,8 @@ pub fn install(url: &str) {
         Ok(manifest) => {
             pb.finish_with_message("Done ✔");
             if manifest[0]["package"]["name"].as_str() == None {
-                return println!("Github repository does not exist");
+                debug!("Could not find field name in package, repository does not exist at the given url");
+                return println!("Package does not exist at the given url");
             }
             println!(
                 "Found a package with name {}",
