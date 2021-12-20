@@ -1,3 +1,4 @@
+use super::debug;
 use yaml_rust::{Yaml, YamlLoader};
 
 pub fn get_package_version(_package: &str) -> &str {
@@ -11,13 +12,13 @@ pub fn get_package_url(_package: &str) -> &str {
 }
 
 // Convert this to object oriented at some point
-pub fn fetch_package_manifest(_package: &str) -> Result<Vec<Yaml>, ()> {
+pub fn fetch_package_manifest(package: &str) -> Result<Vec<Yaml>, ()> {
     let uri = format!(
         "https://raw.githubusercontent.com/{}/main/package.yml",
-        _package
+        package
     );
 
+    debug!("Pulling manifest from {}", uri);
     let req = reqwest::get(&uri).unwrap().text();
-
     Ok(YamlLoader::load_from_str(&req.expect("Couldn't get manifest")).unwrap())
 }
