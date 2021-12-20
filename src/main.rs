@@ -1,5 +1,5 @@
 use init::init;
-use install::{install, install_compiler, install_stdlib};
+use install::{install, install_compiler, install_yflib};
 use log::debug;
 use structopt::StructOpt;
 use uninstall::uninstall;
@@ -31,10 +31,10 @@ enum Command {
     /// yfin install-compiler
     InstallCompiler {},
 
-    /// Install stdlib
-    #[structopt(name = "install-stdlib")]
-    /// yfin install-stdlib
-    InstallStdlib {},
+    /// Install yflib
+    #[structopt(name = "install-yflib")]
+    /// yfin install-yflib
+    InstallYflib {},
 
     /// Uninstall package
     #[structopt(name = "uninstall")]
@@ -71,7 +71,7 @@ fn main() {
     match Command::from_args() {
         Command::Install { url } => install(&url).unwrap(),
         Command::InstallCompiler {} => install_compiler(),
-        Command::InstallStdlib {} => install_stdlib(),
+        Command::InstallYflib {} => install_yflib(),
         Command::Uninstall { package } => uninstall(&package),
         Command::Upgrade { package } => upgrade(&package),
         Command::Init { name } => init(name).unwrap(),
