@@ -3,7 +3,7 @@ use crate::common::github_prefix;
 use crate::package::fetch_package_manifest;
 use git2::Repository;
 use indicatif::{ProgressBar, ProgressStyle};
-use super::package::Package;
+use super::package::{Package, get_local_dir};
 
 const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
@@ -31,20 +31,16 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
     );
     pb.set_message("Installing...");
 
-    match home::home_dir() {
-        Some(path) => {
-            let https_url = github_prefix(url);
-            // Clone the repo to /home/<user>/.local/lib/yflat/<name>
-            let _repo = match Repository::clone(
-                &https_url,
-                format!("{}/.local/lib/yflat/{}/", path.display(), pack.package.name.clone().unwrap()),
-            ) {
-                Ok(repo) => debug!("{:#?}", repo.path()),
-                Err(e) => panic!("failed to clone: {}", e),
-            };
-        }
-        None => println!("Impossible to get your home dir!"),
-    }
+    let https_url = github_prefix(url);
+    let local = get_local_dir();
+    // Clone the repo to /home/<user>/.local/lib/yflat/<name>
+    let _repo = match Repository::clone(
+        &https_url,
+        format!("{}/{}/", local, pack.package.name.clone().unwrap()),
+    ) {
+        Ok(repo) => debug!("{:#?}", repo.path()),
+        Err(e) => panic!("failed to clone: {}", e),
+    };
 
     pb.finish_with_message("Done ✔");
 

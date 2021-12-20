@@ -44,6 +44,17 @@ pub fn fetch_package_manifest(package: &str) -> Result<Package, serde_yaml::Erro
     Ok(package_yaml)
 }
 
+pub fn get_local_dir() -> String {
+    match home::home_dir() {
+        Some(path) => {
+            let package_path = format!("{}/.local/lib/yflat/", path.display());
+            debug!("{}", package_path);
+            return package_path;
+        }
+        None => panic!("Could not get home directory"),
+    }
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
