@@ -4,6 +4,7 @@ use crate::package::fetch_package_manifest;
 use git2::Repository;
 use indicatif::{ProgressBar, ProgressStyle};
 use super::package::{Package, get_local_dir};
+use std::path::Path;
 
 const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
@@ -33,10 +34,17 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
 
     let https_url = github_prefix(url);
     let local = get_local_dir();
+    let package_name = format!("{}/{}/", local, pack.package.name.clone().unwrap());
+
+    if Path::new(&package_name).exists() {
+        eprintln!("Package already exists.\nTry yfin upgrade");
+        std::process::exit(0);
+    }
+
     // Clone the repo to /home/<user>/.local/lib/yflat/<name>
     let _repo = match Repository::clone(
         &https_url,
-        format!("{}/{}/", local, pack.package.name.clone().unwrap()),
+        package_name,
     ) {
         Ok(repo) => debug!("{:#?}", repo.path()),
         Err(e) => panic!("failed to clone: {}", e),
