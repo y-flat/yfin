@@ -1,4 +1,5 @@
 use super::debug;
+use git2::Repository;
 use std::env;
 use std::fs;
 use std::fs::File;
@@ -25,6 +26,13 @@ depends:
     )
 }
 
+fn git_init_package() {
+    match Repository::init("./src") {
+        Ok(_) => debug!("Initialized git"),
+        Err(e) => panic!("failed to init: {}", e),
+    }
+}
+
 fn create_package_contents(name: String) -> std::io::Result<()> {
     // Create package.yml and src
     debug!("Creating directory package.yml");
@@ -34,6 +42,8 @@ fn create_package_contents(name: String) -> std::io::Result<()> {
 
     debug!("Creating src/ folder");
     fs::create_dir_all("./src")?;
+
+    git_init_package();
 
     Ok(())
 }
