@@ -4,6 +4,7 @@ use std::env;
 use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
+use std::process::Command;
 use users::get_current_username;
 
 fn create_file_contents(name: String) -> String {
@@ -28,7 +29,13 @@ depends:
 
 fn git_init_package() {
     match Repository::init(".") {
-        Ok(_) => debug!("Initialized git"),
+        Ok(_) => {
+            debug!("Initialized git");
+            Command::new("git")
+                .args(["checkout", "-b", "main"])
+                .output()
+                .expect("failed to execute process");
+        }
         Err(e) => panic!("failed to init: {}", e),
     }
 }
