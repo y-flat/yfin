@@ -4,6 +4,7 @@ use log::debug;
 use structopt::StructOpt;
 use uninstall::uninstall;
 use upgrade::upgrade;
+use local::{check_for_local, create_local};
 
 pub mod common;
 pub mod error;
@@ -62,6 +63,10 @@ enum Command {
 
 fn main() {
     env_logger::init();
+
+    if !check_for_local() {
+        create_local();
+    }
 
     match Command::from_args() {
         Command::Install { url } => install(&url).unwrap(),
