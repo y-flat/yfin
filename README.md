@@ -1,4 +1,4 @@
-# yfin 0.1.1
+# yfin 0.1.1 ![Rust](https://img.shields.io/github/workflow/status/jakeroggenbuck/yfin/Rust?style=for-the-badge)
 Y-Flat Installer
 
 ### Usage
