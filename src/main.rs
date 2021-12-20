@@ -73,7 +73,7 @@ fn main() {
         Command::InstallCompiler {} => install_compiler(),
         Command::InstallYflib {} => install_yflib(),
         Command::Uninstall { package } => uninstall(&package).unwrap(),
-        Command::Upgrade { package } => upgrade(&package),
+        Command::Upgrade { package } => upgrade(&package).unwrap(),
         Command::Init { name } => init(name).unwrap(),
     }
 }
