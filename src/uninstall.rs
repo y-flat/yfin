@@ -1,6 +1,7 @@
 use super::debug;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::fs;
+use super::package::get_local_dir;
 
 pub fn uninstall(package: &str) -> std::io::Result<()> {
     let pb = ProgressBar::new_spinner();
@@ -14,14 +15,10 @@ pub fn uninstall(package: &str) -> std::io::Result<()> {
     );
     pb.set_message("Uninstalling...");
 
-    match home::home_dir() {
-        Some(path) => {
-            let package_path = format!("{}/.local/lib/yflat/{}/", path.display(), package);
-            debug!("{}", package_path);
-            fs::remove_dir_all(package_path)?;
-        }
-        None => println!("Could not get home directory"),
-    }
+    let local = get_local_dir();
+    fs::remove_dir_all(format!("{}/{}", local, package))?;
+    debug!("Successfully removed package");
+
     pb.finish_with_message("Done ✔");
 
     Ok(())
