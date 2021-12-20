@@ -1,8 +1,10 @@
 use super::debug;
+use git2::Repository;
 use std::env;
 use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
+use std::process::Command;
 use users::get_current_username;
 
 fn create_main_file_contents() -> String {
@@ -35,6 +37,19 @@ depends:
     )
 }
 
+fn git_init_package() {
+    match Repository::init(".") {
+        Ok(_) => {
+            debug!("Initialized git");
+            Command::new("git")
+                .args(["checkout", "-b", "main"])
+                .output()
+                .expect("failed to execute process");
+        }
+        Err(e) => panic!("failed to init: {}", e),
+    }
+}
+  
 fn create_package_file(name: String) -> std::io::Result<()> {
     debug!("Creating package.yml");
     let mut package_file = File::create("package.yml")?;
@@ -56,6 +71,7 @@ fn create_package_contents(name: String) -> std::io::Result<()> {
 
     debug!("Creating src/ folder");
     fs::create_dir_all("./src")?;
+    git_init_package();
 
     env::set_current_dir("./src")?;
     create_main_file()?;
