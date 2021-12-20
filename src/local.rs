@@ -34,13 +34,3 @@ pub fn create_local() {
         None => println!("Could not get home directory"),
     }
 }
-
-#[cfg(test)]
-mod tests {
-    use super::*;
-
-    #[test]
-    fn check_for_local_test() {
-        assert!(check_for_local());
-    }
-}

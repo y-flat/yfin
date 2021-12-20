@@ -28,6 +28,9 @@ package:
     authors:
         - {:?}
 
+    version: 0.1.0
+    url: ''
+
     license: 'MIT'
 
 # Dependencies for this package
@@ -49,7 +52,7 @@ fn git_init_package() {
         Err(e) => panic!("failed to init: {}", e),
     }
 }
-  
+
 fn create_package_file(name: String) -> std::io::Result<()> {
     debug!("Creating package.yml");
     let mut package_file = File::create("package.yml")?;
@@ -101,4 +104,22 @@ pub fn init(name: Option<String>) -> std::io::Result<()> {
     };
 
     Ok(())
+}
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn create_main_file_contents_test() {
+        assert!(create_main_file_contents().contains("main()"))
+    }
+
+    #[test]
+    fn create_package_file_contents_test() {
+        assert!(create_package_file_contents("new".to_string()).contains("package:"));
+        assert!(create_package_file_contents("test".to_string()).contains("name:"));
+        assert!(create_package_file_contents("test".to_string()).contains("version:"));
+        assert!(!create_package_file_contents("pack".to_string()).contains("naa:"));
+    }
 }
