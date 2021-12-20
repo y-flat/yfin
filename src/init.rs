@@ -28,6 +28,9 @@ package:
     authors:
         - {:?}
 
+    version: 0.1.0
+    url: ''
+
     license: 'MIT'
 
 # Dependencies for this package
@@ -116,6 +119,7 @@ mod tests {
     fn create_package_file_contents_test() {
         assert!(create_package_file_contents("new".to_string()).contains("package:"));
         assert!(create_package_file_contents("test".to_string()).contains("name:"));
+        assert!(create_package_file_contents("test".to_string()).contains("version:"));
         assert!(!create_package_file_contents("pack".to_string()).contains("naa:"));
     }
 }

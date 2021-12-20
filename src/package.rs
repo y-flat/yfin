@@ -22,3 +22,27 @@ pub fn fetch_package_manifest(package: &str) -> Result<Vec<Yaml>, ()> {
     let req = reqwest::get(&uri).unwrap().text();
     Ok(YamlLoader::load_from_str(&req.expect("Couldn't get manifest")).unwrap())
 }
+
+#[cfg(test)]
+mod tests {
+    use super::*;
+
+    #[test]
+    fn fetch_package_manifest_test() -> Result<(), ()> {
+        assert_eq!(
+            fetch_package_manifest("JakeRoggenbuck/yf-package-example")?[0]["package"]["name"]
+                .as_str()
+                .unwrap(),
+            "yf-package-example"
+        );
+
+        assert_ne!(
+            fetch_package_manifest("JakeRoggenbuck/yf-package-example")?[0]["package"]["name"]
+                .as_str()
+                .unwrap(),
+            "yf-package"
+        );
+
+        Ok(())
+    }
+}
