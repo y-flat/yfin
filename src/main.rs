@@ -1,16 +1,19 @@
 use init::init;
 use install::{install, install_compiler, install_stdlib};
-use log::{debug};
+use log::debug;
 use structopt::StructOpt;
 use uninstall::uninstall;
 use upgrade::upgrade;
+use local::{check_for_local, create_local};
 
-pub mod init;
+pub mod common;
 pub mod error;
+pub mod init;
 pub mod install;
 pub mod package;
 pub mod uninstall;
 pub mod upgrade;
+pub mod local;
 
 #[derive(StructOpt)]
 #[structopt(name = "yfin", about = "Y-Flat Installer")]
@@ -61,8 +64,12 @@ enum Command {
 fn main() {
     env_logger::init();
 
+    if !check_for_local() {
+        create_local();
+    }
+
     match Command::from_args() {
-        Command::Install { url } => install(&url),
+        Command::Install { url } => install(&url).unwrap(),
         Command::InstallCompiler {} => install_compiler(),
         Command::InstallStdlib {} => install_stdlib(),
         Command::Uninstall { package } => uninstall(&package),
