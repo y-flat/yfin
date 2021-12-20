@@ -72,7 +72,7 @@ fn main() {
         Command::Install { url } => install(&url).unwrap(),
         Command::InstallCompiler {} => install_compiler(),
         Command::InstallYflib {} => install_yflib(),
-        Command::Uninstall { package } => uninstall(&package),
+        Command::Uninstall { package } => uninstall(&package).unwrap(),
         Command::Upgrade { package } => upgrade(&package),
         Command::Init { name } => init(name).unwrap(),
     }
