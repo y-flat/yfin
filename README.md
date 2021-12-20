@@ -21,3 +21,6 @@ install-stdlib      Install stdlib yfin install-stdlib
 uninstall           Uninstall package
 upgrade             Install newer version of package
 ```
+
+# Video
+[![Watch the video](https://i.imgur.com/nqnaLqW.png)](https://www.youtube.com/watch?v=IW0TiN3d7FI)
