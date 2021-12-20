@@ -5,7 +5,17 @@ use std::fs::File;
 use std::io::prelude::*;
 use users::get_current_username;
 
-fn create_file_contents(name: String) -> String {
+fn create_main_file_contents() -> String {
+    String::from(
+        "use std.io;
+
+main() {
+    io.println(\"Hello, World!\");
+}",
+    )
+}
+
+fn create_package_file_contents(name: String) -> String {
     let username = get_current_username().unwrap();
 
     format!(
@@ -25,16 +35,30 @@ depends:
     )
 }
 
+fn create_package_file(name: String) -> std::io::Result<()> {
+    debug!("Creating package.yml");
+    let mut package_file = File::create("package.yml")?;
+    let package_contents = create_package_file_contents(name);
+    write!(package_file, "{}", package_contents)?;
+    Ok(())
+}
+
+fn create_main_file() -> std::io::Result<()> {
+    debug!("Creating main file");
+    let mut main_file = File::create("main.yf")?;
+    let main_contents = create_main_file_contents();
+    write!(main_file, "{}", main_contents)?;
+    Ok(())
+}
+
 fn create_package_contents(name: String) -> std::io::Result<()> {
-    // Create package.yml and src
-    debug!("Creating directory package.yml");
-    let mut file = File::create("package.yml")?;
-    let contents = create_file_contents(name);
-    write!(file, "{}", contents)?;
+    create_package_file(name)?;
 
     debug!("Creating src/ folder");
     fs::create_dir_all("./src")?;
 
+    env::set_current_dir("./src")?;
+    create_main_file()?;
     Ok(())
 }
 
