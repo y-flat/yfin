@@ -68,8 +68,14 @@ mod tests {
             Some("An example package for yflat".to_string())
         );
         assert_eq!(pack.package.version, Some("0.1.0".to_string()));
-        assert_eq!(pack.package.url, Some("https://github.com/JakeRoggenbuck/yf-package-example".to_string()));
-        assert_eq!(pack.package.authors, Some(vec!["Jake Roggenbuck".to_string()]));
+        assert_eq!(
+            pack.package.url,
+            Some("https://github.com/JakeRoggenbuck/yf-package-example".to_string())
+        );
+        assert_eq!(
+            pack.package.authors,
+            Some(vec!["Jake Roggenbuck".to_string()])
+        );
         assert_eq!(pack.package.license, Some("MIT".to_string()));
         assert_eq!(pack.package.depends, None);
 

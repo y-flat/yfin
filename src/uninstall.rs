@@ -1,7 +1,7 @@
 use super::debug;
+use super::package::get_local_dir;
 use indicatif::{ProgressBar, ProgressStyle};
 use std::fs;
-use super::package::get_local_dir;
 
 pub fn uninstall(package: &str) -> std::io::Result<()> {
     let pb = ProgressBar::new_spinner();
