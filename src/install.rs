@@ -2,7 +2,7 @@ use super::debug;
 use super::package::{get_local_dir, Package};
 use super::spinner::spinner;
 use crate::common::github_prefix;
-use crate::package::fetch_package_manifest;
+use crate::package::fetch_remote_package;
 use git2::Repository;
 use std::path::Path;
 
@@ -10,7 +10,7 @@ const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
 
 pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
-    let pack: Package = fetch_package_manifest(url)?;
+    let pack: Package = fetch_remote_package(url)?;
 
     // Checks for the needed parts of the manifest
     if pack.package.name == None {
