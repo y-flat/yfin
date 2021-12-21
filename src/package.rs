@@ -1,5 +1,7 @@
 use super::debug;
 use serde::{Deserialize, Serialize};
+use std::path::Path;
+use std::fs;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InnerPackage {
@@ -17,8 +19,7 @@ pub struct Package {
     pub package: InnerPackage,
 }
 
-// Convert this to object oriented at some point
-pub fn fetch_package_manifest(package: &str) -> Result<Package, serde_yaml::Error> {
+pub fn fetch_remote_package(package: &str) -> Result<Package, serde_yaml::Error> {
     let uri = format!(
         "https://raw.githubusercontent.com/{}/main/package.yml",
         package
@@ -32,6 +33,17 @@ pub fn fetch_package_manifest(package: &str) -> Result<Package, serde_yaml::Erro
     debug!("{:?}", package_yaml);
 
     Ok(package_yaml)
+}
+
+pub fn fetch_local_package(package: &str) -> Result<Package, serde_yaml::Error> {
+    let local = get_local_dir();
+    let package_name = Path::new(&local).join(package).join("package.yml");
+
+    let contents = fs::read_to_string(package_name)
+        .expect("Error reading file");
+
+    let loaded: Package = serde_yaml::from_str(&contents)?;
+    Ok(loaded)
 }
 
 pub fn get_local_dir() -> String {
@@ -51,7 +63,7 @@ mod tests {
 
     #[test]
     fn fetch_package_manifest_test() -> Result<(), serde_yaml::Error> {
-        let pack: Package = fetch_package_manifest("JakeRoggenbuck/yf-package-example")?;
+        let pack: Package = fetch_remote_package("JakeRoggenbuck/yf-package-example")?;
         assert_eq!(pack.package.name, Some("yf-package-example".to_string()));
         assert_eq!(
             pack.package.description,
