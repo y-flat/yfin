@@ -1,9 +1,9 @@
 use super::debug;
 use super::package::{get_local_dir, Package};
+use super::spinner::spinner;
 use crate::common::github_prefix;
 use crate::package::fetch_package_manifest;
 use git2::Repository;
-use indicatif::{ProgressBar, ProgressStyle};
 use std::path::Path;
 
 const YFC_URL: &str = "adamhutchings/yfc";
@@ -23,17 +23,7 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
         pack.package.name.clone().unwrap()
     );
 
-    // Starts a spinner that will finish when the git repository is cloned
-    let pb = ProgressBar::new_spinner();
-    pb.enable_steady_tick(120);
-    pb.set_style(
-        ProgressStyle::default_spinner()
-            .tick_strings(&[
-                "⠄", "⠆", "⠇", "⠋", "⠙", "⠸", "⠰", "⠠", "⠰", "⠸", "⠙", "⠋", "⠇", "⠆",
-            ])
-            .template("{spinner:.blue} {msg}"),
-    );
-    pb.set_message("Installing...");
+    let spin = spinner("Installing...".to_string());
 
     let https_url = github_prefix(url);
     let local = get_local_dir();
@@ -54,7 +44,7 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
         Err(e) => panic!("failed to clone: {}", e),
     };
 
-    pb.finish_with_message("Done ✔");
+    spin.finish_with_message("Done ✔");
 
     Ok(())
 }

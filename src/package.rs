@@ -17,16 +17,6 @@ pub struct Package {
     pub package: InnerPackage,
 }
 
-pub fn get_package_version(package: &str) -> &str {
-    // TODO: get package version from name
-    return "Not 0.0.1";
-}
-
-pub fn get_package_url(_package: &str) -> &str {
-    // TODO: get package url from name
-    return "Not github.com/JakeRoggenbuck/auto-clock-speed";
-}
-
 // Convert this to object oriented at some point
 pub fn fetch_package_manifest(package: &str) -> Result<Package, serde_yaml::Error> {
     let uri = format!(

@@ -12,6 +12,7 @@ pub mod init;
 pub mod install;
 pub mod local;
 pub mod package;
+pub mod spinner;
 pub mod uninstall;
 pub mod upgrade;
 
