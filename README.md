@@ -26,4 +26,4 @@ upgrade             Install newer version of package
 [![Watch the video](https://i.imgur.com/nqnaLqW.png)](https://www.youtube.com/watch?v=IW0TiN3d7FI)
 
 # Join the discussion
-https://discord.gg/v27SpPyj
+<a href="https://discord.gg/v27SpPyj">![discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)</a>
