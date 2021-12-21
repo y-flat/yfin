@@ -1,7 +1,7 @@
 use super::debug;
 use serde::{Deserialize, Serialize};
-use std::path::Path;
 use std::fs;
+use std::path::Path;
 
 #[derive(Clone, Debug, PartialEq, Serialize, Deserialize)]
 pub struct InnerPackage {
@@ -39,8 +39,7 @@ pub fn fetch_local_package(package: &str) -> Result<Package, serde_yaml::Error> 
     let local = get_local_dir();
     let package_name = Path::new(&local).join(package).join("package.yml");
 
-    let contents = fs::read_to_string(package_name)
-        .expect("Error reading file");
+    let contents = fs::read_to_string(package_name).expect("Error reading file");
 
     let loaded: Package = serde_yaml::from_str(&contents)?;
     Ok(loaded)
