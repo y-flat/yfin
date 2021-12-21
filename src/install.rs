@@ -1,10 +1,10 @@
 use super::debug;
 use super::package::{get_local_dir, Package};
+use super::spinner::spinner;
 use crate::common::github_prefix;
 use crate::package::fetch_package_manifest;
 use git2::Repository;
 use std::path::Path;
-use super::spinner::spinner;
 
 const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";

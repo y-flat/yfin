@@ -1,7 +1,7 @@
+use super::spinner::spinner;
 use crate::package::get_local_dir;
 use std::env;
 use std::process::Command;
-use super::spinner::spinner;
 
 pub fn upgrade(package: &str) -> std::io::Result<()> {
     let spin = spinner("Upgrading...".to_string());
