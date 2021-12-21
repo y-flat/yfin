@@ -13,7 +13,7 @@ pub fn upgrade(package: &str) -> std::io::Result<()> {
             ])
             .template("{spinner:.blue} {msg}"),
     );
-    pb.set_message("Uninstalling...");
+    pb.set_message("Upgrading...");
 
     let local = get_local_dir();
     let package_path = format!("{}/{}", local, package);
