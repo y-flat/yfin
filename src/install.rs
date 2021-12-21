@@ -34,7 +34,8 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
 
     let https_url = github_prefix(url);
     let local = get_local_dir();
-    let package_name = format!("{}/{}/", local, pack.package.name.clone().unwrap());
+    let package_name = Path::new(&local).join(pack.package.name.clone().unwrap());
+    debug!("{}", package_name.display());
 
     if Path::new(&package_name).exists() {
         eprintln!("Package already exists.\nTry yfin upgrade");
