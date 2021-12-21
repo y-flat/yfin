@@ -1,19 +1,19 @@
 use init::init;
 use install::{install, install_compiler, install_yflib};
+use local::{check_for_local, create_local};
 use log::debug;
 use structopt::StructOpt;
 use uninstall::uninstall;
 use upgrade::upgrade;
-use local::{check_for_local, create_local};
 
 pub mod common;
 pub mod error;
 pub mod init;
 pub mod install;
+pub mod local;
 pub mod package;
 pub mod uninstall;
 pub mod upgrade;
-pub mod local;
 
 #[derive(StructOpt)]
 #[structopt(name = "yfin", about = "Y-Flat Installer")]
