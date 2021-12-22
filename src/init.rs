@@ -1,3 +1,4 @@
+use super::bold_color_text;
 use super::debug;
 use git2::Repository;
 use std::env;
@@ -6,7 +7,7 @@ use std::fs::File;
 use std::io::prelude::*;
 use std::path::Path;
 use std::process::Command;
-use termion::{color, style};
+use termion::color;
 use users::get_current_username;
 
 fn create_main_file_contents() -> String {
@@ -100,12 +101,8 @@ pub fn init(name: Option<String>, lib: bool) -> std::io::Result<()> {
     } else {
         if Path::new(&name.as_ref().unwrap()).exists() {
             eprintln!(
-                "Package {}{}{}{}{} already created",
-                style::Bold,
-                color::Fg(color::Blue),
-                name.unwrap(),
-                color::Fg(color::Reset),
-                style::Reset,
+                "Package {} already created",
+                bold_color_text!(name.unwrap(), color::Blue),
             );
             std::process::exit(0);
         }
@@ -117,14 +114,7 @@ pub fn init(name: Option<String>, lib: bool) -> std::io::Result<()> {
     }
 
     match create_package_contents(project_name.clone(), lib) {
-        Ok(_) => println!(
-            "Successfully created {}{}{}{}{}!",
-            style::Bold,
-            color::Fg(color::Blue),
-            project_name,
-            color::Fg(color::Reset),
-            style::Reset,
-        ),
+        Ok(_) => println!("Successfully created {}!", bold_color_text!(project_name, color::Green)),
         Err(e) => eprintln!("{}", e),
     };
 
