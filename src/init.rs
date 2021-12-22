@@ -132,14 +132,14 @@ mod tests {
 
     #[test]
     fn create_main_file_contents_test() {
-        assert!(create_main_file_contents().contains("main()"))
+        assert!(create_main_file_contents!().contains("main()"))
     }
 
     #[test]
     fn create_package_file_contents_test() {
-        assert!(create_package_file_contents("new".to_string()).contains("package:"));
-        assert!(create_package_file_contents("test".to_string()).contains("name:"));
-        assert!(create_package_file_contents("test".to_string()).contains("version:"));
-        assert!(!create_package_file_contents("pack".to_string()).contains("naa:"));
+        assert!(create_package_file_contents!("new".to_string()).contains("package:"));
+        assert!(create_package_file_contents!("test".to_string()).contains("name:"));
+        assert!(create_package_file_contents!("test".to_string()).contains("version:"));
+        assert!(!create_package_file_contents!("pack".to_string()).contains("naa:"));
     }
 }
