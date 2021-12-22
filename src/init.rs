@@ -4,6 +4,7 @@ use std::env;
 use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
+use std::path::Path;
 use std::process::Command;
 use termion::{color, style};
 use users::get_current_username;
@@ -85,15 +86,30 @@ fn create_package_contents(name: String, lib: bool) -> std::io::Result<()> {
 
 pub fn init(name: Option<String>, lib: bool) -> std::io::Result<()> {
     let project_name;
+
     if name.is_none() {
         let path = env::current_dir()?;
         let path_name = path.components().next_back().unwrap();
+
         debug!(
             "Name not specified, working in current directory {:?}",
             path_name.as_os_str()
         );
+
         project_name = format!("{:?}", path_name.as_os_str());
     } else {
+        if Path::new(&name.as_ref().unwrap()).exists() {
+            eprintln!(
+                "Package {}{}{}{}{} already created",
+                style::Bold,
+                color::Fg(color::Blue),
+                name.unwrap(),
+                color::Fg(color::Reset),
+                style::Reset,
+            );
+            std::process::exit(0);
+        }
+
         debug!("Creating directory called {}", name.clone().unwrap());
         fs::create_dir_all(format!("./{}", name.clone().unwrap()))?;
         env::set_current_dir(name.clone().unwrap())?;
@@ -102,11 +118,12 @@ pub fn init(name: Option<String>, lib: bool) -> std::io::Result<()> {
 
     match create_package_contents(project_name.clone(), lib) {
         Ok(_) => println!(
-            "Successfully created {}{}{}{}!",
+            "Successfully created {}{}{}{}{}!",
             style::Bold,
             color::Fg(color::Blue),
             project_name,
-            color::Fg(color::Reset)
+            color::Fg(color::Reset),
+            style::Reset,
         ),
         Err(e) => eprintln!("{}", e),
     };
