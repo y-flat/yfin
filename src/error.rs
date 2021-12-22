@@ -21,3 +21,13 @@ impl fmt::Display for Error {
         }
     }
 }
+
+impl fmt::Debug for Error {
+    fn fmt(&self, f: &mut fmt::Formatter) -> fmt::Result {
+        match *self {
+            Error::ParseError => write!(f, "ParseError"),
+            Error::RequestFailed => write!(f, "RequestFailed"),
+            Error::Unknown => write!(f, "Unknown"),
+        }
+    }
+}

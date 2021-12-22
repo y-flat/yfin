@@ -73,7 +73,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn fetch_package_manifest_test() -> Result<(), serde_yaml::Error> {
+    fn fetch_package_manifest_test() -> Result<(), error::Error> {
         let pack: Package = fetch_remote_package("JakeRoggenbuck/yf-package-example")?;
         assert_eq!(pack.package.name, Some("yf-package-example".to_string()));
         assert_eq!(
