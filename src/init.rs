@@ -62,15 +62,16 @@ fn create_package_file(name: String) -> std::io::Result<()> {
     Ok(())
 }
 
-fn create_main_file() -> std::io::Result<()> {
+fn create_main_file(lib: bool) -> std::io::Result<()> {
+    let name = if lib { "lib.yf" } else { "main.yf" };
     debug!("Creating main file");
-    let mut main_file = File::create("main.yf")?;
+    let mut main_file = File::create(name)?;
     let main_contents = create_main_file_contents();
     write!(main_file, "{}", main_contents)?;
     Ok(())
 }
 
-fn create_package_contents(name: String) -> std::io::Result<()> {
+fn create_package_contents(name: String, lib: bool) -> std::io::Result<()> {
     create_package_file(name)?;
 
     debug!("Creating src/ folder");
@@ -78,11 +79,11 @@ fn create_package_contents(name: String) -> std::io::Result<()> {
     git_init_package();
 
     env::set_current_dir("./src")?;
-    create_main_file()?;
+    create_main_file(lib)?;
     Ok(())
 }
 
-pub fn init(name: Option<String>) -> std::io::Result<()> {
+pub fn init(name: Option<String>, lib: bool) -> std::io::Result<()> {
     let project_name;
     if name.is_none() {
         let path = env::current_dir()?;
@@ -99,7 +100,7 @@ pub fn init(name: Option<String>) -> std::io::Result<()> {
         project_name = name.unwrap();
     }
 
-    match create_package_contents(project_name.clone()) {
+    match create_package_contents(project_name.clone(), lib) {
         Ok(_) => println!(
             "Successfully created {}{}{}{}!",
             style::Bold,
