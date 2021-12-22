@@ -1,3 +1,4 @@
+use super::bold_color_text;
 use super::debug;
 use super::package::{get_local_dir, Package};
 use super::spinner::spinner;
@@ -5,6 +6,7 @@ use crate::common::github_prefix;
 use crate::package::fetch_remote_package;
 use git2::Repository;
 use std::path::Path;
+use termion::color;
 
 const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
@@ -28,7 +30,7 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
 
     println!(
         "Found a package with name {}",
-        pack.package.name.clone().unwrap()
+        bold_color_text!(pack.package.name.clone().unwrap(), color::Blue)
     );
 
     let https_url = github_prefix(url);
@@ -38,8 +40,11 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
 
     if Path::new(&package_name).exists() {
         eprintln!(
-            "Package already exists.\nTry yfin upgrade {}",
-            pack.package.name.clone().unwrap()
+            "Package already exists.\nTry {}",
+            bold_color_text!(
+                format!("yfin upgrade {}", pack.package.name.clone().unwrap()),
+                color::Blue
+            )
         );
         std::process::exit(0);
     }
