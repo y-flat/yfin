@@ -39,6 +39,20 @@ If you have cargo on your machine, skip to step 3
    cargo install --git https://github.com/JakeRoggenbuck/yfin
    ```
 
+## New package
+Create a new package with `yfin init <name>` or `yfin init` for the current directory.
+Here is what you will see in the directory.
+```
+yf-package-example (main) λ tree .
+.
+├── package.yml
+├── README.md
+└── src
+    └── lib.yf
+
+1 directory, 3 files
+```
+
 # Join the discussion
 <a href="https://discord.gg/v27SpPyj">![discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)</a>
 
