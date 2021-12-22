@@ -46,7 +46,7 @@ depends:
 fn git_init_package() {
     match Repository::init(".") {
         Ok(_) => {
-            debug!("Initialized git");
+            println!("Initialized git!");
             Command::new("git")
                 .args(["checkout", "-b", "main"])
                 .output()
@@ -57,7 +57,7 @@ fn git_init_package() {
 }
 
 fn create_package_file(name: String) -> std::io::Result<()> {
-    debug!("Creating package.yml");
+    println!("Creating {}", bold_color_text!("package.yml", color::Green));
     let mut package_file = File::create("package.yml")?;
     let package_contents = create_package_file_contents(name);
     write!(package_file, "{}", package_contents)?;
@@ -66,7 +66,7 @@ fn create_package_file(name: String) -> std::io::Result<()> {
 
 fn create_main_file(lib: bool) -> std::io::Result<()> {
     let name = if lib { "lib.yf" } else { "main.yf" };
-    debug!("Creating main file");
+    println!("Creating {}", bold_color_text!(name, color::Green));
     let mut main_file = File::create(name)?;
     let main_contents = create_main_file_contents();
     write!(main_file, "{}", main_contents)?;
@@ -76,7 +76,7 @@ fn create_main_file(lib: bool) -> std::io::Result<()> {
 fn create_package_contents(name: String, lib: bool) -> std::io::Result<()> {
     create_package_file(name)?;
 
-    debug!("Creating src/ folder");
+    println!("Creating {} folder", bold_color_text!("src/", color::Green));
     fs::create_dir_all("./src")?;
     git_init_package();
 
