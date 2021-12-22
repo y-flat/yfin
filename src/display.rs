@@ -1,10 +1,10 @@
 #[macro_export]
-macro_rules! bold_blue_word {
-    ($a:expr) => {{
+macro_rules! bold_color_text {
+    ($a:expr, $b:expr) => {{
         format!(
             "{}{}{}{}{}",
             termion::style::Bold,
-            termion::color::Fg(termion::color::Blue),
+            termion::color::Fg($b),
             $a,
             termion::color::Fg(termion::color::Reset),
             termion::style::Reset,
