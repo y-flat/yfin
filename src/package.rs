@@ -1,4 +1,5 @@
 use super::debug;
+use super::error;
 use serde::{Deserialize, Serialize};
 use std::fs;
 use std::path::Path;
@@ -19,17 +20,28 @@ pub struct Package {
     pub package: InnerPackage,
 }
 
-pub fn fetch_remote_package(package: &str) -> Result<Package, serde_yaml::Error> {
+pub fn fetch_remote_package(package: &str) -> Result<Package, error::Error> {
     let uri = format!(
         "https://raw.githubusercontent.com/{}/main/package.yml",
         package
     );
 
     debug!("Pulling manifest from {}", uri);
-    let req = reqwest::get(&uri).unwrap().text().unwrap();
-    debug!("{}", req);
+    let mut req = reqwest::get(&uri).unwrap();
 
-    let package_yaml: Package = serde_yaml::from_str(&req)?;
+    if !req.status().is_success() {
+        eprintln!("Requested turned back a ");
+        return Err(error::Error::RequestFailed);
+    }
+
+    let text = req.text().unwrap();
+
+    debug!("{}", text);
+
+    let package_yaml: Package = match serde_yaml::from_str(&text) {
+        Ok(package) => package,
+        Err(_) => return Err(error::Error::ParseError),
+    };
     debug!("{:?}", package_yaml);
 
     Ok(package_yaml)
@@ -61,7 +73,7 @@ mod tests {
     use super::*;
 
     #[test]
-    fn fetch_package_manifest_test() -> Result<(), serde_yaml::Error> {
+    fn fetch_package_manifest_test() -> Result<(), error::Error> {
         let pack: Package = fetch_remote_package("JakeRoggenbuck/yf-package-example")?;
         assert_eq!(pack.package.name, Some("yf-package-example".to_string()));
         assert_eq!(

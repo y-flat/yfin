@@ -10,7 +10,15 @@ const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
 
 pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
-    let pack: Package = fetch_remote_package(url)?;
+    let spin = spinner("Installing...".to_string());
+
+    let pack: Package = match fetch_remote_package(url) {
+        Err(error) => {
+            spin.finish_with_message(format!("{}", error));
+            return Ok(());
+        }
+        Ok(package) => package,
+    };
 
     // Checks for the needed parts of the manifest
     if pack.package.name == None {
@@ -22,8 +30,6 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
         "Found a package with name {}",
         pack.package.name.clone().unwrap()
     );
-
-    let spin = spinner("Installing...".to_string());
 
     let https_url = github_prefix(url);
     let local = get_local_dir();
