@@ -59,6 +59,9 @@ enum Command {
         /// yfin init <name>
         #[structopt()]
         name: Option<String>,
+
+        #[structopt(short, long)]
+        lib: bool,
     },
 }
 
@@ -75,6 +78,6 @@ fn main() {
         Command::InstallYflib {} => install_yflib(),
         Command::Uninstall { package } => uninstall(&package).unwrap(),
         Command::Upgrade { package } => upgrade(&package).unwrap(),
-        Command::Init { name } => init(name).unwrap(),
+        Command::Init { name, lib } => init(name, lib).unwrap(),
     }
 }
