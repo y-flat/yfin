@@ -5,6 +5,7 @@ use std::fs;
 use std::fs::File;
 use std::io::prelude::*;
 use std::process::Command;
+use termion::{color, style};
 use users::get_current_username;
 
 fn create_main_file_contents() -> String {
@@ -99,8 +100,14 @@ pub fn init(name: Option<String>, lib: bool) -> std::io::Result<()> {
         project_name = name.unwrap();
     }
 
-    match create_package_contents(project_name, lib) {
-        Ok(_) => println!("Package created successfully!"),
+    match create_package_contents(project_name.clone(), lib) {
+        Ok(_) => println!(
+            "Successfully created {}{}{}{}!",
+            style::Bold,
+            color::Fg(color::Blue),
+            project_name,
+            color::Fg(color::Reset)
+        ),
         Err(e) => eprintln!("{}", e),
     };
 
