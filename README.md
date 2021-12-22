@@ -46,7 +46,6 @@ Here is what you will see in the directory.
 yf-package-example (main) λ tree .
 .
 ├── package.yml
-├── README.md
 └── src
     └── lib.yf
 
