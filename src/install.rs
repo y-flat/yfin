@@ -1,6 +1,7 @@
 use super::bold_color_text;
 use super::debug;
 use super::package::{get_local_dir, Package};
+use super::repository;
 use super::spinner::spinner;
 use crate::common::github_prefix;
 use crate::package::fetch_remote_package;
@@ -11,10 +12,17 @@ use termion::color;
 const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
 
-pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
+pub fn install(mut name: &str) -> Result<(), serde_yaml::Error> {
     let spin = spinner("Installing...".to_string());
 
-    let pack: Package = match fetch_remote_package(url) {
+    let mut url: String = name.to_string();
+
+    match repository::get_official_url(&url) {
+        Ok(pkg) => url = pkg.to_string(),
+        Err(_) => {}
+    }
+
+    let pack: Package = match fetch_remote_package(&url) {
         Err(error) => {
             spin.finish_with_message(format!("{}", error));
             return Ok(());
@@ -33,7 +41,7 @@ pub fn install(url: &str) -> Result<(), serde_yaml::Error> {
         bold_color_text!(pack.package.name.clone().unwrap(), color::Blue)
     );
 
-    let https_url = github_prefix(url);
+    let https_url = github_prefix(&url);
     let local = get_local_dir();
     let package_name = Path::new(&local).join(pack.package.name.clone().unwrap());
     debug!("{}", package_name.display());

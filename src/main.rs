@@ -2,20 +2,22 @@ use init::init;
 use install::{install, install_compiler, install_yflib};
 use local::{check_for_local, create_local};
 use log::debug;
+use repository::update_repository_cache;
 use structopt::StructOpt;
 use uninstall::uninstall;
 use upgrade::upgrade;
 
 pub mod common;
+pub mod display;
 pub mod error;
 pub mod init;
 pub mod install;
 pub mod local;
 pub mod package;
+pub mod repository;
 pub mod spinner;
 pub mod uninstall;
 pub mod upgrade;
-pub mod display;
 
 #[derive(StructOpt)]
 #[structopt(name = "yfin", about = "Y-Flat Installer")]
@@ -64,6 +66,9 @@ enum Command {
         #[structopt(short, long)]
         lib: bool,
     },
+
+    #[structopt(name = "update")]
+    Update {},
 }
 
 fn main() {
@@ -80,5 +85,6 @@ fn main() {
         Command::Uninstall { package } => uninstall(&package).unwrap(),
         Command::Upgrade { package } => upgrade(&package).unwrap(),
         Command::Init { name, lib } => init(name, lib).unwrap(),
+        Command::Update {} => update_repository_cache().unwrap(),
     }
 }
