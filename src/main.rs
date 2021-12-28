@@ -35,6 +35,11 @@ enum Command {
     /// yfin install-compiler
     InstallCompiler {},
 
+    /// Upgrade compiler
+    #[structopt(name = "upgrade-compiler")]
+    /// yfin install-compiler
+    UpgradeCompiler {},
+
     /// Install yflib
     #[structopt(name = "install-yflib")]
     /// yfin install-yflib
@@ -80,7 +85,8 @@ fn main() {
 
     match Command::from_args() {
         Command::Install { url } => install(&url).unwrap(),
-        Command::InstallCompiler {} => install_compiler(),
+        Command::InstallCompiler {} => install_compiler(false),
+        Command::UpgradeCompiler {} => install_compiler(true),
         Command::InstallYflib {} => install_yflib(),
         Command::Uninstall { package } => uninstall(&package).unwrap(),
         Command::Upgrade { package } => upgrade(&package).unwrap(),
