@@ -101,12 +101,30 @@ pub fn install_compiler(upgrade: bool) {
 
     match env::set_current_dir(package_name) {
         Ok(_) => {
-            println!("Was able to install");
+            debug!("Was able to install");
 
             Command::new("sh")
                 .arg("./scripts/build.sh")
                 .output()
                 .expect("failed to make");
+
+            debug!("Made");
+
+            match home::home_dir() {
+                Some(path) => {
+                    let local_path =
+                        Path::new(&format!("{}/{}", path.display(), ".yflat/bin")).to_owned();
+
+                    Command::new("cp")
+                        .arg("./cmake/yfc")
+                        .arg(local_path)
+                        .output()
+                        .expect("move failed");
+                }
+                None => println!("Could not get home directory"),
+            }
+
+            debug!("Moved");
         }
         Err(e) => eprintln!("{}", e),
     };
