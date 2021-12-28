@@ -57,6 +57,11 @@ yf-package-example (main) λ tree .
 # Join the discussion
 <a href="https://discord.gg/v27SpPyj">![discord](https://img.shields.io/badge/Discord-7289DA?style=for-the-badge&logo=discord&logoColor=white)</a>
 
-# Video
+# Full (0.1.1)
 [![Watch the video](https://i.imgur.com/nqnaLqW.png)](https://www.youtube.com/watch?v=IW0TiN3d7FI)
+
+# Install Compiler (0.1.2)
+[![Watch the video](https://i.imgur.com/iMEbOjP.png)](https://www.youtube.com/watch?v=F8Rc_zs_J1c)
+
+
 
