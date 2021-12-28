@@ -26,7 +26,7 @@ pub fn create_local(path_name: &str) {
     match home::home_dir() {
         Some(path) => {
             let local_path =
-                Path::new(format!("{}/{}", path.display(), &path_name).as_str()).to_owned();
+                Path::new(&format!("{}/{}", path.display(), &path_name).as_str()).to_owned();
 
             match fs::create_dir_all(local_path.clone()) {
                 Ok(_) => debug!("Created {:?}", local_path),
@@ -55,7 +55,7 @@ pub fn create_local_bin() {
 
 pub fn check_for_bin_in_path() -> bool {
     if let Ok(path) = env::var("PATH") {
-        if path.contains(".yflat/bin/") {
+        if path.contains(".yflat/bin") {
             return true;
         }
     }
@@ -63,7 +63,7 @@ pub fn check_for_bin_in_path() -> bool {
     match home::home_dir() {
         Some(path) => {
             let local_path =
-                Path::new(format!("{}/{}", path.display(), ".yflat/bin/").as_str()).to_owned();
+                Path::new(format!("{}/{}", path.display(), ".yflat/bin").as_str()).to_owned();
 
             match fs::create_dir_all(local_path.clone()) {
                 Ok(_) => warn_user!(format!(
