@@ -1,6 +1,6 @@
 # yfin 0.1.2 ![Rust](https://img.shields.io/github/workflow/status/jakeroggenbuck/yfin/Rust?style=for-the-badge)
 
-Yfin is the Official package manager for the [Y-flat](https://github.com/adamhutchings/yfc) programming language.
+Yfin is the Official package manager for the Y-flat programming language.
 Yfin allows the user to install, upgrade, and uninstall packages. It also allows a user to initialize a package with the Y-flat package structure and files automatically generated. In future, Yfin will also allow users to publish packages.
 
 ## Usage
