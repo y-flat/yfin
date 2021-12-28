@@ -6,13 +6,16 @@ use super::spinner::spinner;
 use crate::common::github_prefix;
 use crate::package::fetch_remote_package;
 use git2::Repository;
+use std::env;
+use std::fs;
 use std::path::Path;
+use std::process::Command;
 use termion::color;
 
 const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
 
-pub fn install(mut name: &str) -> Result<(), serde_yaml::Error> {
+pub fn install(name: &str) -> Result<(), serde_yaml::Error> {
     let spin = spinner("Installing...".to_string());
 
     let mut url: String = name.to_string();
@@ -58,18 +61,57 @@ pub fn install(mut name: &str) -> Result<(), serde_yaml::Error> {
     }
 
     // Clone the repo to /home/<user>/.local/lib/yflat/<name>
-    let _repo = match Repository::clone(&https_url, package_name) {
+    match Repository::clone(&https_url, package_name) {
         Ok(repo) => debug!("{:#?}", repo.path()),
         Err(e) => panic!("failed to clone: {}", e),
-    };
+    }
 
     spin.finish_with_message("Done ✔");
 
     Ok(())
 }
 
-pub fn install_compiler() {
-    install(YFC_URL).unwrap();
+pub fn install_compiler(upgrade: bool) {
+    let spin = spinner("Installing compiler...".to_string());
+
+    let local = get_local_dir();
+    let package_name = Path::new(&local).join("yfc");
+
+    if !upgrade {
+        if Path::new(&package_name.clone()).exists() {
+            eprintln!(
+                "Package already exists.\nTry {}",
+                bold_color_text!(format!("yfin upgrade-compiler"), color::Blue)
+            );
+            std::process::exit(0);
+        }
+    } else {
+        if Path::new(&package_name).exists() {
+            match fs::remove_dir_all(package_name.clone()) {
+                Ok(_) => debug!("Removed old yfc"),
+                Err(e) => eprintln!("{}", e),
+            };
+        }
+    }
+
+    match Repository::clone(&github_prefix(YFC_URL), package_name.clone()) {
+        Ok(repo) => debug!("{:#?}", repo.path()),
+        Err(e) => panic!("failed to clone: {}", e),
+    }
+
+    match env::set_current_dir(package_name) {
+        Ok(_) => {
+            println!("Was able to install");
+
+            Command::new("sh")
+                .arg("./scripts/build.sh")
+                .output()
+                .expect("failed to make");
+        }
+        Err(e) => eprintln!("{}", e),
+    };
+
+    spin.finish_with_message("Done ✔");
 }
 
 pub fn install_yflib() {
