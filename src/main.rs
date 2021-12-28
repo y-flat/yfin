@@ -1,6 +1,6 @@
 use init::init;
 use install::{install, install_compiler, install_yflib};
-use local::{check_for_local_bin, check_for_local_lib, create_local_bin, create_local_lib};
+use local::{check_for_local_bin, check_for_local_lib, create_local_bin, create_local_lib, check_for_bin_in_path};
 use log::debug;
 use repository::update_repository_cache;
 use structopt::StructOpt;
@@ -78,6 +78,8 @@ enum Command {
 
 fn main() {
     env_logger::init();
+
+    check_for_bin_in_path();
 
     if !check_for_local_lib() {
         create_local_lib();
