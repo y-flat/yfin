@@ -12,7 +12,7 @@ use termion::color;
 const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
 
-pub fn install(mut name: &str) -> Result<(), serde_yaml::Error> {
+pub fn install(name: &str) -> Result<(), serde_yaml::Error> {
     let spin = spinner("Installing...".to_string());
 
     let mut url: String = name.to_string();
