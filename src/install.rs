@@ -11,6 +11,7 @@ use std::fs;
 use std::path::Path;
 use std::process::Command;
 use termion::color;
+use nix::unistd::Uid;
 
 const YFC_URL: &str = "adamhutchings/yfc";
 const YFLIB_URL: &str = "adamhutchings/yflib";
@@ -87,10 +88,15 @@ pub fn install_compiler(upgrade: bool) {
         }
     } else {
         if Path::new(&package_name).exists() {
-            match fs::remove_dir_all(package_name.clone()) {
-                Ok(_) => debug!("Removed old yfc"),
-                Err(e) => eprintln!("{}", e),
-            };
+            // Check for root before running remove_dir_all
+            if !Uid::effective().is_root() {
+                match fs::remove_dir_all(package_name.clone()) {
+                    Ok(_) => debug!("Removed old yfc"),
+                    Err(e) => eprintln!("{}", e),
+                };
+            } else {
+                eprintln!("Please do not run install as root.");
+            }
         }
     }
 
