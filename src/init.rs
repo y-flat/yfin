@@ -87,32 +87,43 @@ fn create_package_contents(name: String, lib: bool) -> std::io::Result<()> {
     Ok(())
 }
 
+fn init_current_dir() -> std::io::Result<String> {
+    let path = env::current_dir()?;
+    let path_name = path.components().next_back().unwrap();
+
+    debug!(
+        "Name not specified, working in current directory {:?}",
+        path_name.as_os_str()
+    );
+
+    let project_name = format!("{:?}", path_name.as_os_str());
+    Ok(project_name)
+}
+
+fn init_new_dir(name: String) -> std::io::Result<String> {
+    if Path::new(&name).exists() {
+        eprintln!(
+            "Package {} already created",
+            bold_color_text!(name, color::Blue),
+        );
+        std::process::exit(0);
+    }
+
+    debug!("Creating directory called {}", name.clone());
+    fs::create_dir_all(format!("./{}", name.clone()))?;
+    env::set_current_dir(name.clone())?;
+    let project_name = name;
+
+    Ok(project_name)
+}
+
 pub fn init(name: Option<String>, lib: bool) -> std::io::Result<()> {
-    let project_name;
+    let project_name: String;
 
     if name.is_none() {
-        let path = env::current_dir()?;
-        let path_name = path.components().next_back().unwrap();
-
-        debug!(
-            "Name not specified, working in current directory {:?}",
-            path_name.as_os_str()
-        );
-
-        project_name = format!("{:?}", path_name.as_os_str());
+        project_name = init_current_dir()?;
     } else {
-        if Path::new(&name.as_ref().unwrap()).exists() {
-            eprintln!(
-                "Package {} already created",
-                bold_color_text!(name.unwrap(), color::Blue),
-            );
-            std::process::exit(0);
-        }
-
-        debug!("Creating directory called {}", name.clone().unwrap());
-        fs::create_dir_all(format!("./{}", name.clone().unwrap()))?;
-        env::set_current_dir(name.clone().unwrap())?;
-        project_name = name.unwrap();
+        project_name = init_new_dir(name.unwrap().to_string())?;
     }
 
     match create_package_contents(project_name.clone(), lib) {
