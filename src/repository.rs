@@ -47,7 +47,7 @@ pub fn get_official_repositories() -> Result<HashMap<String, String>, error::Err
     match fs::File::open(path) {
         Ok(mut file) => {
             let mut text = String::new();
-            file.read_to_string(&mut text);
+            file.read_to_string(&mut text).expect("Could not read package list file.");
             let mut package: HashMap<String, String> = HashMap::new();
             for line in text.lines() {
                 let vals: Vec<&str> = line.trim().split(":").collect();
